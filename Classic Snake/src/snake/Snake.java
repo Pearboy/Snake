@@ -10,6 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Snake extends Application {
@@ -28,10 +30,15 @@ public class Snake extends Application {
         }
         movement[3] = true;
         SnakeBlock player = new SnakeBlock(0, 0, 2);
-        // player.addBlock();
+        player.addBlock();
         player.draw(gc);
 
         Food food = Food.makeFood(canvas);
+        
+        // Display game over message when player dies.
+        Text gameover = new Text(580, 580, "Game Over");
+        gameover.setFont(new Font(20));
+        gameover.setVisible(false);
         
         // Game loop
         Timer timer = new Timer();
@@ -44,7 +51,11 @@ public class Snake extends Application {
                 player.draw(gc);
                 player.eat(canvas, food);
                 Food.draw(gc, canvas, food.x, food.y);
-                player.collisionCheck(gc, canvas, timer);
+                if (player.collisionCheck(canvas)) {
+                    timer.cancel();
+                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                    gameover.setVisible(true);
+                }
             }
         }, 500, 100);
         
@@ -76,7 +87,7 @@ public class Snake extends Application {
                 }
             }
         });
-
+        root.getChildren().add(gameover);
         root.getChildren().add(canvas);
         
         primaryStage.setTitle("Snake");

@@ -1,6 +1,5 @@
 package snake;
 
-import java.util.Timer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -64,12 +63,11 @@ public class SnakeBlock {
         }
     }
     
-    public void collisionCheck(GraphicsContext gc, Canvas canvas, Timer timer) {
+    public boolean collisionCheck(Canvas canvas) {
         // Check if snake has collided with end of canvas.
         if (this.x < 0 || this.y < 0 || this.y > canvas.getHeight() 
                 || this.x > canvas.getWidth()) {
-            timer.cancel();
-            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            return true;
         }
         
         // Check if snake has collided with itself.
@@ -78,12 +76,12 @@ public class SnakeBlock {
             SnakeBlock current2 = this;
             while (current2.next != null) {
                 if (current1 != current2 && current1.x == current2.x && current1.y == current2.y) {
-                    timer.cancel();
-                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                    return true;
                 }
                 current2 = current2.next;
             }
             current1 = current1.next;
         }
+        return false;
     }
 }
