@@ -14,17 +14,29 @@ public class Food {
     /**
      * Creates a food object at a random location on the canvas.
      * @param canvas Canvas object where the food will be placed.
+     * @param player The SnakeBlock head of the player.
      * @return Food object containing a random x and y value.
      */
-    public static Food makeFood(Canvas canvas) {
-        int randx = (int) (32 * Math.floor((Math.random() * (canvas.getWidth() + 1)) / 32));
-        int randy = (int) (32 * Math.floor((Math.random() * (canvas.getHeight() + 1)) / 32));
-        return new Food(randx, randy);
+    public static Food makeFood(Canvas canvas, SnakeBlock player) {
+        int randx = 0, randy = 0;
+        Food food = new Food(randx, randy);
+        Food.changeLocation(canvas, food, player);
+        return food;
     }
     
-    public static void changeLocation(Canvas canvas, Food food) {
+    public static void changeLocation(Canvas canvas, Food food, SnakeBlock player) {
         food.x = (int) (32 * Math.floor((Math.random() * (canvas.getWidth() + 1)) / 32));
         food.y = (int) (32 * Math.floor((Math.random() * (canvas.getHeight() + 1)) / 32));
+        
+        // Make sure that the food does not spawn inside the player.
+        SnakeBlock current = player;
+        while (current.next != null) {
+            if (food.x == current.x && food.y == current.y) {
+                current = null;
+                Food.changeLocation(canvas, food, player);
+            }
+            current = current.next;
+        }
     }
     
     public static void draw(GraphicsContext gc, Canvas canvas, int x, int y) {

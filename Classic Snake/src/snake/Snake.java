@@ -29,11 +29,11 @@ public class Snake extends Application {
             movement[i] = false;
         }
         movement[3] = true;
-        SnakeBlock player = new SnakeBlock(0, 0, 2);
+        SnakeBlock player = new SnakeBlock(32, 0, 2);
         player.addBlock();
         player.draw(gc);
 
-        Food food = Food.makeFood(canvas);
+        Food food = Food.makeFood(canvas, player);
         
         // Display game over message when player dies.
         Text gameover = new Text(580, 580, "Game Over");

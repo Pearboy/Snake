@@ -58,7 +58,7 @@ public class SnakeBlock {
     
     public void eat(Canvas canvas, Food food) {
         if (food.x == this.x && food.y == this.y) {
-            Food.changeLocation(canvas, food);
+            Food.changeLocation(canvas, food, this);
             this.addBlock();
         }
     }
